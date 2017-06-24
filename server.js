@@ -13,7 +13,7 @@ app.post('/', function(req, res){
     mailgun.messages().send(req.body, function (err, body) {
         if (err) {
             res.json({
-                status: 500
+                status: 500,
                 error : err
             });
             console.log("got an error: ", err);
