@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/mahuntington/emailer/issues"
   },
-  "homepage": "https://github.com/mahuntington/emailer#readme"
+  "homepage": "https://github.com/mahuntington/emailer#readme",
+  "dependencies": {
+    "express": "^4.15.3"
+  }
 }
