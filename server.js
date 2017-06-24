@@ -1,9 +1,12 @@
 const express = require('express');
 const app = express();
-var Mailgun = require('mailgun-js');
+const Mailgun = require('mailgun-js');
+const mailgun = new Mailgun({apiKey: process.env.MAILGUNAPIKEY, domain: process.env.MAILGUNDOMAIN});
+const bodyParser = require('body-parser');
 
-app.get('/', function(req, res){
-    var mailgun = new Mailgun({apiKey: process.env.MAILGUNAPIKEY, domain: process.env.MAILGUNDOMAIN});
+app.use(bodyParser.json());
+
+app.post('/', function(req, res){
 
     var data = {
         //Specify email data
@@ -15,18 +18,17 @@ app.get('/', function(req, res){
         html: 'Hello, This is not a plain-text email, I wanted to test some spicy Mailgun sauce in NodeJS! <a href="http://0.0.0.0:3030/validate?' + req.params.mail + '">Click here to add your email address to a mailing list</a>'
     }
 
-    //Invokes the method to send emails given the above data with the helper library
-    mailgun.messages().send(data, function (err, body) {
-        //If there is an error, render the error page
+    console.log(req.body);
+
+    mailgun.messages().send(req.body, function (err, body) {
         if (err) {
-            res.render('error', { error : err});
+            res.json({ error : err});
             console.log("got an error: ", err);
         }
-        //Else we can greet    and leave
         else {
-            //Here "submitted.jade" is the view file for this landing page
-            //We pass the variable "email" from the url parameter in an object rendered by Jade
-            res.send('submitted');
+            res.json({
+                success:200
+            });
             console.log(body);
         }
     });
