@@ -8,26 +8,20 @@ app.use(bodyParser.json());
 
 app.post('/', function(req, res){
 
-    var data = {
-        //Specify email data
-        from: 'matt.huntington@gmail.com',
-        //The email to contact
-        to: 'matt.huntington@gmail.com',
-        //Subject and text data
-        subject: 'Hello from Mailgun',
-        html: 'Hello, This is not a plain-text email, I wanted to test some spicy Mailgun sauce in NodeJS! <a href="http://0.0.0.0:3030/validate?' + req.params.mail + '">Click here to add your email address to a mailing list</a>'
-    }
-
     console.log(req.body);
 
     mailgun.messages().send(req.body, function (err, body) {
         if (err) {
-            res.json({ error : err});
+            res.json({
+                status: 500
+                error : err
+            });
             console.log("got an error: ", err);
         }
         else {
             res.json({
-                success:200
+                status:200,
+                body: body
             });
             console.log(body);
         }
